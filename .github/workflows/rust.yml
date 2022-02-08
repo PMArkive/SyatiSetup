@@ -21,6 +21,10 @@ jobs:
         cd release
         mv syatisetup.exe ${{ github.workspace }}
         popd
+        pushd %CD%
+        cd unrar
+        mv unrar.exe ${{ github.workspace }}
+        popd
         ls
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -28,4 +32,5 @@ jobs:
         automatic_release_tag: "Auto"
         prerelease: true
         title: "Auto Build"
-        files: syatisetup.exe
+        files: |
+            *.exe
