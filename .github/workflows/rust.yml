@@ -21,7 +21,7 @@ jobs:
         cd release
         mv syatisetup.exe ${{ github.workspace }}
         popd
-        pushd %CD%
+        pushd ${{ github.workspace }}
         cd unrar
         mv unrar.exe ${{ github.workspace }}
         popd
