@@ -23,6 +23,7 @@ jobs:
         popd
         pushd ${{ github.workspace }}
         cd unrar
+        go build
         mv unrar.exe ${{ github.workspace }}
         popd
         ls
