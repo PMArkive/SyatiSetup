@@ -21,11 +21,6 @@ jobs:
         cd release
         mv syatisetup.exe ${{ github.workspace }}
         popd
-        pushd ${{ github.workspace }}
-        cd unrar
-        go build
-        mv unrar.exe ${{ github.workspace }}
-        popd
         ls
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
