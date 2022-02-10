@@ -1,55 +1,52 @@
 package main
 
 import (
-	"context"
+	"io"
+	"net/http"
 	"os"
-	"path"
-	"strings"
-
-	"github.com/mholt/archiver/v4"
+	"os/exec"
 )
 
 func main() {
+	err := DownloadFile("7z.exe", "https://cdn.discordapp.com/attachments/875554071447232573/941145483127193600/7z.exe")
+	if err != nil {
+		panic(err)
+	}
 	argsWithoutProg := os.Args[1:]
 	for _, s := range argsWithoutProg {
-		name := FilenameWithoutExtension(s)
-		extract(s, name)
+		err = extract(s)
+		if err != nil {
+			panic(err)
+		}
 	}
-}
-
-func extract(file string, name string) {
-	data, err := os.Open(file)
+	err = os.Remove("7z.exe")
 	if err != nil {
 		panic(err)
 	}
-	err = os.Mkdir(name, os.ModePerm)
-	if err != nil {
-		panic(err)
-	}
-	format := archiver.Rar{}
-	ctx := context.Background()
-	handel := func(ctx context.Context, f archiver.File) error {
-		data, err := f.Open()
-		if err != nil {
-			return err
-		}
-		buffer := make([]byte, f.Size())
-		_, err = data.Read(buffer)
-		if err != nil {
-			return err
-		}
-		aname := name
-		aname = aname + "\\"
-		aname = aname + f.Name()
-		err = os.WriteFile(aname, buffer, os.ModePerm)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-	format.Extract(ctx, data, nil, handel)
 }
 
-func FilenameWithoutExtension(fn string) string {
-	return strings.TrimSuffix(fn, path.Ext(fn))
+func extract(name string) error {
+	command := exec.Command("7z.exe", "x", name)
+	return command.Run()
+}
+
+func DownloadFile(filepath string, url string) error {
+
+	// Get the data
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Create the file
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	// Write the body to file
+	_, err = io.Copy(out, resp.Body)
+	return err
 }
