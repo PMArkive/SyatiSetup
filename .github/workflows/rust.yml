@@ -28,34 +28,9 @@ jobs:
       with:
         name: sytatisetup
         path: ${{ github.workspace }}/output
-  
-  Build-Go:
-
-    runs-on: windows-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: 1.17
-    - name: Build
-      run: |
-        pushd ${{ github.workspace }}
-        cd unrar
-        go build
-        mv *.exe ${{ github.workspace }}
-        popd
-        mkdir output
-        mv *.exe output
-    - name: Upload unrar
-      uses: actions/upload-artifact@v2.2.3
-      with:
-        name: unrar
-        path: ${{ github.workspace }}/output
 
   Publish:
-    needs: [Build-Rust, Build-Go]
+    needs: Build-Rust
     runs-on: windows-latest
 
     steps:
@@ -63,10 +38,6 @@ jobs:
     - uses: actions/download-artifact@v2.0.10
       with: 
         name: sytatisetup
-        path: ${{ github.workspace }}
-    - uses: actions/download-artifact@v2.0.10
-      with: 
-        name: unrar
         path: ${{ github.workspace }}
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:

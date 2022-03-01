@@ -1,12 +1,13 @@
 extern crate reqwest;
 extern crate indicatif;
 extern crate thread_control;
+extern crate zip_extract;
+use zip_extract::*;
 use reqwest::*;
 use indicatif::*;
 use thread_control::*;
-use std::process::*;
+use std::path::*;
 use std::fs::*;
-use std::env::*;
 use std::*;
 
 pub fn download(arg: &String, last: bool) -> String {
@@ -41,15 +42,11 @@ pub fn download(arg: &String, last: bool) -> String {
 }
 
 pub fn downloadandunzip(arg: &String, last: bool) {
-    let name = download(arg, last);
-    let dir = current_dir().unwrap();
-    let d = dir.to_str().unwrap();
-    let mut dirn = String::from(d);
-    dirn.push_str("\\");
-    dirn.push_str("unrar.exe");
-    let mut proc = Command::new(dirn).arg(&name).spawn().unwrap();
-    proc.wait().unwrap();
-    fs::remove_file(name).unwrap();
+    let name = &download(arg, last);
+    let folder = Path::new(Path::new(name).file_stem().unwrap().to_str().unwrap());
+    let file = File::open(name).unwrap();
+    extract(file, folder, false).unwrap();
+    remove_file(name).unwrap();
 }
 
 pub fn createstr(arg: &str) -> String {

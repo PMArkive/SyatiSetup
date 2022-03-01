@@ -3,9 +3,7 @@ mod funcs;
 use std::*;
 
 fn main() {
-    funcs::download(&funcs::createstr("https://cdn.discordapp.com/attachments/875554071447232573/941148579723092088/unrar.exe"), false);
-    funcs::downloadandunzip(&funcs::createstr("https://cdn.discordapp.com/attachments/643925511906656257/829423349574533130/CodeWarrior.rar"), false);
-    funcs::downloadandunzip(&funcs::createstr("https://cdn.discordapp.com/attachments/643925511906656257/829424059191525427/Kamek.rar"), true);
-    fs::remove_file("unrar.exe").unwrap();
+    funcs::downloadandunzip(&funcs::createstr("https://cdn.discordapp.com/attachments/886616711925751829/948264229226565662/CodeWarrior.zip"), false);
+    funcs::downloadandunzip(&funcs::createstr("https://cdn.discordapp.com/attachments/886616711925751829/948264229817958420/Kamek.zip"), true);
     println!("Downloaded!");
 }
