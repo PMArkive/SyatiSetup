@@ -7,6 +7,4 @@ edition = "2021"
 
 [dependencies]
 reqwest = { version = "0.11", features = ["blocking", "json"] }
-indicatif = "0.16.2"
-thread-control = { git = "https://github.com/DenisKolodin/thread-control" }
 zip-extract = "0.1.1"
