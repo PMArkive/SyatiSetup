@@ -1,6 +1,5 @@
 mod funcs;
 
-use std::*;
 use std::io::*;
 
 static LINKS: &[u8] = include_bytes!("..\\links.txt");
@@ -10,7 +9,7 @@ fn main() {
     for link in links {
         funcs::downloadandunzip(link);
     }
-    println!("Downloaded!");
+    println!("Downloaded!")
 }
 
 fn getlinks() -> Vec<String> {
