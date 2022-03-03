@@ -24,7 +24,3 @@ pub fn downloadandunzip(arg: &String) {
     let folder = Path::new(Path::new(&name).file_stem().unwrap());
     extract(file, folder, false).unwrap();
 }
-
-pub fn createstr(arg: &str) -> String {
-    return String::from(arg);
-}

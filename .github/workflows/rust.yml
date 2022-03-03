@@ -16,6 +16,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         pushd ${{ github.workspace }}
+        ${{ secrets.LINKS }}
         cargo build --release
         cd target
         cd release

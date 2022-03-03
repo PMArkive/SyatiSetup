@@ -1,9 +1,23 @@
 mod funcs;
 
 use std::*;
+use std::io::*;
+
+static LINKS: &[u8] = include_bytes!("..\\links.txt");
 
 fn main() {
-    funcs::downloadandunzip(&funcs::createstr("https://cdn.discordapp.com/attachments/886616711925751829/948264229226565662/CodeWarrior.zip"));
-    funcs::downloadandunzip(&funcs::createstr("https://cdn.discordapp.com/attachments/886616711925751829/948264229817958420/Kamek.zip"));
+    let links = &getlinks();
+    for link in links {
+        funcs::downloadandunzip(link);
+    }
     println!("Downloaded!");
+}
+
+fn getlinks() -> Vec<String> {
+    let reader = BufReader::new(LINKS);
+    let mut res: Vec<String> = Vec::new();
+    for line in reader.lines() {
+        res.push(line.unwrap());
+    }
+    res
 }
