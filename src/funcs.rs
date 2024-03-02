@@ -15,8 +15,7 @@ pub fn download(arg: &String) -> (String, Cursor<Vec<u8>>) {
     (String::from(name), out)
 }
 
-pub fn downloadandunzip(arg: &String) {
-    let num = arg.rfind("/").unwrap();   
+pub fn downloadandunzip(arg: &String) { 
     let pair = download(arg);
     let (name, file) = pair;
     let folder = Path::new(Path::new(&name).file_stem().unwrap());
