@@ -22,7 +22,7 @@ jobs:
         ${{ secrets.LINKS }}
         cargo build --release
     - name: Upload syatisetup
-      if: ${{runner.os}} == 'Windows'
+      if: runner.os == 'Windows'
       uses: actions/upload-artifact@v2.2.3
       with:
         name: ${{matrix.os}}
