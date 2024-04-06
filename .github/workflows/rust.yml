@@ -11,36 +11,50 @@ env:
 jobs:
   Build-Rust:
 
-    runs-on: windows-latest
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v2
     - run: |
-        pushd ${{ github.workspace }}
         ${{ secrets.LINKS }}
         cargo build --release
-        cd target
-        cd release
-        mv syatisetup.exe ${{ github.workspace }}
-        popd
-        mkdir output
-        mv syatisetup.exe output
     - name: Upload syatisetup
+      if: ${{runner.os}} == 'Windows'
       uses: actions/upload-artifact@v2.2.3
       with:
-        name: sytatisetup
-        path: ${{ github.workspace }}/output
+        name: ${{matrix.os}}
+        path: target/release/syatisetup.exe
+    - name: Upload syatisetup
+      uses: actions/upload-artifact@v3.1.2
+      if: runner.os != 'Windows'
+      with:
+          name: ${{matrix.os}}
+          path: target/release/syatisetup
 
   Publish:
     needs: Build-Rust
+    if: github.event_name == 'push'
     runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v2.0.10
       with: 
-        name: sytatisetup
+        name: windows-latest
         path: ${{ github.workspace }}
+    - uses: actions/download-artifact@v2.0.10
+      with: 
+          name: ubuntu-latest
+          path: ${{ github.workspace }}
+    -  run: ren syatisetup syatisetup-linux
+    - uses: actions/download-artifact@v2.1.1
+      with:
+        name: macos-latest
+        path: ${{github.workspace}}
+    - run: ren syatisetup syatisetup-macos
     - uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
@@ -48,4 +62,4 @@ jobs:
         prerelease: true
         title: "Auto Build"
         files: |
-            *.exe
+          syatisetup*

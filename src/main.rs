@@ -4,7 +4,7 @@ use std::io::*;
 use std::fs;
 use std::path::Path;
 
-static LINKS: &[u8] = include_bytes!("..\\links.txt");
+static LINKS: &[u8] = include_bytes!("../links.txt");
 
 fn main() {
     if Path::new("CodeWarrior").exists() {
